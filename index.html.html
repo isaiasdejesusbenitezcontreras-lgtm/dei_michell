@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Princesa ❤️ Te voy a echar de menos</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel:wght@500;700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap"
+        rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        roseGold: '#E0A96D',
+                        deepBurgundy: '#2C0B14',
+                        softGold: '#F4D06F',
+                        crimsonLove: '#800A1D',
+                        darkObsidian: '#0D0709',
+                    },
+                    fontFamily: {
+                        script: ['Alex Brush', 'cursive'],
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at top, #2C0B14 0%, #0D0709 70%, #050203 100%);
+            color: #FAF5F0;
+            overflow-x: hidden;
+        }
+
+        @keyframes heartbeatPulse {
+            0% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 5px rgba(224, 169, 109, 0.4));
+            }
+
+            14% {
+                transform: scale(1.18);
+                filter: drop-shadow(0 0 20px rgba(220, 38, 38, 0.8));
+            }
+
+            28% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 5px rgba(224, 169, 109, 0.4));
+            }
+
+            42% {
+                transform: scale(1.15);
+                filter: drop-shadow(0 0 15px rgba(220, 38, 38, 0.7));
+            }
+
+            70% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 5px rgba(224, 169, 109, 0.4));
+            }
+        }
+
+        .beating-heart {
+            display: inline-block;
+            animation: heartbeatPulse 1.8s infinite ease-in-out;
+        }
+
+        /* Glassmorphic Container */
+        .glass-romantic {
+            background: rgba(44, 11, 20, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(224, 169, 109, 0.25);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+        }
+
+        .glass-romantic-hover {
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-romantic-hover:hover {
+            transform: translateY(-6px) scale(1.01);
+            border-color: rgba(244, 208, 111, 0.5);
+            box-shadow: 0 30px 60px rgba(128, 10, 29, 0.4);
+        }
+
+        /* Particle Overlay */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* Accordion Smooth Expand */
+        .letter-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.7s cubic-bezier(0, 1, 0, 1), opacity 0.5s ease;
+            opacity: 0;
+        }
+
+        .letter-content.open {
+            max-height: 1000px;
+            opacity: 1;
+            transition: max-height 0.8s ease-in-out, opacity 0.6s ease-in-out;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0D0709;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #800A1D;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+
+<body class="relative min-h-screen selection:bg-red-900 selection:text-gold">
+
+    <canvas id="particles-canvas"></canvas>
+
+    <div class="fixed bottom-6 right-6 z-50">
+        <div class="glass-romantic rounded-full p-2 pr-6 flex items-center gap-3 border border-roseGold/40 shadow-2xl">
+            <button id="playAudioBtn"
+                class="w-12 h-12 rounded-full bg-gradient-to-r from-crimsonLove to-roseGold flex items-center justify-center text-white shadow-lg hover:scale-110 active:scale-95 transition-all">
+                <i id="audioIcon" class="fa-solid fa-heart beating-heart text-lg"></i>
+            </button>
+            <div>
+                <p id="audioTitle" class="font-serif text-xs font-bold text-roseGold tracking-wider">te quiero</p>
+                <p id="audioSubtitle" class="text-[10px] text-gray-300">Toca para reproducir melodía</p>
+            </div>
+        </div>
+    </div>
+
+    <header class="sticky top-0 z-40 glass-romantic border-b border-roseGold/20 backdrop-blur-lg">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="#" class="font-script text-3xl md:text-4xl text-roseGold flex items-center gap-2">
+                <span>Deimili</span>
+                <i class="fa-solid fa-heart text-red-600 text-xl beating-heart"></i>
+            </a>
+            <nav class="hidden md:flex space-x-8 text-xs font-semibold tracking-widest uppercase text-gray-300">
+                <a href="#inicio" class="hover:text-roseGold transition-colors">Inicio</a>
+                <a href="#historia" class="hover:text-roseGold transition-colors">Nosotros</a>
+                <a href="#palabras" class="hover:text-roseGold transition-colors">Para Ti</a>
+                <a href="#galeria" class="hover:text-roseGold transition-colors">Recuerdos</a>
+                <a href="#promesa" class="hover:text-roseGold transition-colors">Promesa</a>
+            </nav>
+            <div class="flex items-center gap-2 text-xs font-serif text-softGold">
+                <i class="fa-solid fa-heart text-red-500 beating-heart"></i>
+                <span class="hidden sm:inline">Sé que nos comeremos el mundo</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-5xl mx-auto px-4 py-10 space-y-28 relative z-20">
+
+        <section id="inicio" class="text-center pt-8 md:pt-16 flex flex-col items-center justify-center min-h-[85vh]">
+            <div
+                class="inline-flex items-center gap-2 px-5 py-2 rounded-full glass-romantic border border-roseGold/30 text-softGold text-xs md:text-sm font-medium mb-8">
+                <i class="fa-solid fa-heart text-red-500 beating-heart"></i>
+                <span>enfermera preciosa, eres mi persona favorita</span>
+                <i class="fa-solid fa-heart text-red-500 beating-heart"></i>
+            </div>
+
+            <h1 class="font-serif text-4xl md:text-7xl font-bold tracking-tight leading-tight mb-6">
+                Creemos nuestra propia historia<br>
+                <span
+                    class="font-script text-6xl md:text-8xl bg-gradient-to-r from-roseGold via-pink-300 to-softGold bg-clip-text text-transparent">
+                    Eres mi mayor oracion
+                </span>
+            </h1>
+
+            <p class="max-w-2xl text-gray-300 text-base md:text-lg mb-10 leading-relaxed font-light">
+                ambos sabemos todo lo que hemos tenido que pasar, pero mi respeto y mi deseo irremplazable de construir
+                un futuro a tu lado están más vivos que nunca. Eres la mujer que amo, por la que le pido a Dios y admiro
+                infinitamente.
+            </p>
+
+            <!-- Hero Featured Photo Card -->
+            <div
+                class="relative w-full max-w-2xl rounded-3xl overflow-hidden glass-romantic p-3 border border-roseGold/30 shadow-2xl group">
+                <div class="relative h-96 md:h-[450px] rounded-2xl overflow-hidden">
+                    <video src="primero.mp4" alt="Deimili y Yo en el mar"
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        autoplay muted loop>
+                    </video>
+                    <div class="absolute inset-0 bg-gradient-to-t from-darkObsidian via-transparent to-transparent">
+                    </div>
+                    <div class="absolute bottom-6 left-6 right-6 text-left">
+                        <span class="text-xs font-serif tracking-widest text-softGold uppercase">Sino hubiese sido
+                            contigo ese solaso no me lo llevo yo</span>
+                        <h3 class="font-serif text-2xl text-white font-bold mt-1">Caminar contigo</h3>
+                        <p class="text-xs text-gray-300 mt-1 font-light italic">"Aquel momento en que tomé tu mano y
+                            caminé contigo sintiendo que nada más importaba."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="palabras" class="scroll-mt-24">
+            <div class="text-center mb-16">
+                <i class="fa-solid fa-heart text-red-600 text-3xl beating-heart mb-3"></i>
+                <span class="block text-xs font-bold text-softGold tracking-widest uppercase">Admiración Profunda</span>
+                <h2 class="font-serif text-3xl md:text-5xl font-bold mt-2 text-white">Eres la mujer mas increible del
+                    mundo</h2>
+                <div
+                    class="w-20 h-1 bg-gradient-to-r from-crimsonLove via-roseGold to-softGold mx-auto mt-4 rounded-full">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="space-y-6 text-gray-300 font-light leading-relaxed">
+                    <div class="glass-romantic p-6 rounded-2xl border border-roseGold/20">
+                        <h3 class="font-serif text-xl font-bold text-roseGold mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-crown text-softGold text-sm"></i> No reindes antes nada
+                        </h3>
+                        <p class="text-sm">
+                            Deimili, no dejo de admirar la fuerza interior que tienes. Eres una mujer valiente,
+                            resiliente y de un corazón puro. Verte afrontar la vida me inspira cada día a dar lo mejor
+                            de mí para estar a tu altura.
+                        </p>
+                    </div>
+
+                    <div class="glass-romantic p-6 rounded-2xl border border-roseGold/20">
+                        <h3 class="font-serif text-xl font-bold text-roseGold mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-sparkles text-softGold text-sm"></i> Todo Lo Que Me Gusta de Ti
+                        </h3>
+                        <p class="text-sm">
+                            Amo tus ojos, tu sonrisa sincera, la ternura de tus gestos y esa forma única en que me
+                            miras. Me fascina tu esencia y el deseo que tengo de cuidarte, protegerte y hacerte feliz
+                            todos los días.
+                        </p>
+                    </div>
+
+                    <div class="glass-romantic p-6 rounded-2xl border border-roseGold/20">
+                        <h3 class="font-serif text-xl font-bold text-roseGold mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-shield-heart text-softGold text-sm"></i> Juntos Podremos Con Todo
+                        </h3>
+                        <p class="text-sm">
+                            Los procesos de la vida nos enseñan y nos maduran. Sé con certeza absoluta que no hay
+                            obstáculo que no podamos superar si caminamos de la mano, escuchándonos y queriéndonos como
+                            solo nosotros sabemos hacerlo.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Video Feature Highlight -->
+                <div class="glass-romantic p-3 rounded-3xl border border-roseGold/30 relative">
+                    <div
+                        class="relative rounded-2xl overflow-hidden bg-black aspect-[9/16] max-h-[500px] mx-auto flex items-center justify-center">
+                        <video controls class="w-full h-full object-cover">
+                            <source src="WhatsApp Video 2026-09-23 at 3.40.52 PM.mp4" type="video/mp4">
+                            Tu navegador no soporta reproducción de video.
+                        </video>
+                    </div>
+                    <div class="p-4 text-center">
+                        <p class="font-script text-2xl text-softGold">"Ame cada instante a tu lado..."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="historia" class="scroll-mt-24">
+            <div class="text-center mb-16">
+                <span class="text-xs font-bold text-softGold tracking-widest uppercase">hay Momentos Sagrados</span>
+                <h2 class="font-serif text-3xl md:text-5xl font-bold mt-2 text-white">Memorias Que Nos Unen</h2>
+                <p class="text-gray-400 text-xs mt-2">Detalles inolvidables grabados en el alma.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                <!-- Memory Card 1 -->
+                <div
+                    class="glass-romantic p-6 rounded-3xl border border-roseGold/20 glass-romantic-hover flex flex-col justify-between">
+                    <div>
+                        <div
+                            class="w-12 h-12 rounded-2xl bg-crimsonLove/30 border border-crimsonLove flex items-center justify-center text-roseGold mb-6">
+                            <i class="fa-solid fa-water text-xl"></i>
+                        </div>
+                        <h3 class="font-serif text-xl font-bold text-white mb-2">Caminar Hacia El Mar</h3>
+                        <p class="text-gray-300 text-xs leading-relaxed font-light">
+                            Volver a ver el mar, sentir la brisa y tomar fuertemente tu mano. Subir esa loma aunque tu
+                            estabas mas cansada que yo y la arena la playa me hizo entender que el mundo es más hermoso
+                            cuando estoy junto a ti gracias. Pero no quiero que tengamos una vida llena de viajes y
+                            recuerdos unicos
+                        </p>
+                    </div>
+                    <div
+                        class="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-[11px] text-softGold">
+                        <span>quede cansado pero feliz</span>
+                        <i class="fa-solid fa-heart beating-heart"></i>
+                    </div>
+                </div>
+
+                <!-- Memory Card 2 -->
+                <div
+                    class="glass-romantic p-6 rounded-3xl border border-roseGold/20 glass-romantic-hover flex flex-col justify-between">
+                    <div>
+                        <div
+                            class="w-12 h-12 rounded-2xl bg-crimsonLove/30 border border-crimsonLove flex items-center justify-center text-roseGold mb-6">
+                            <i class="fa-solid fa-bed text-xl"></i>
+                        </div>
+                        <h3 class="font-serif text-xl font-bold text-white mb-2">Dormir En El Hotel</h3>
+                        <p class="text-gray-300 text-xs leading-relaxed font-light">
+                            Aquella noche juntos en el hotel, donde el silencio de la habitación nos trajo paz. y nme
+                            permitio Sentir tu calor, abrazarte al despertar y estar contigo y sentirte ha sido lo mejor
+                            para mi.
+                        </p>
+                    </div>
+                    <div
+                        class="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-[11px] text-softGold">
+                        <span>me diste paz </span>
+                        <i class="fa-solid fa-heart beating-heart"></i>
+                    </div>
+                </div>
+
+                <!-- Memory Card 3 -->
+                <div
+                    class="glass-romantic p-6 rounded-3xl border border-roseGold/20 glass-romantic-hover flex flex-col justify-between">
+                    <div>
+                        <div
+                            class="w-12 h-12 rounded-2xl bg-crimsonLove/30 border border-crimsonLove flex items-center justify-center text-roseGold mb-6">
+                            <i class="fa-solid fa-house-user text-xl"></i>
+                        </div>
+                        <h3 class="font-serif text-xl font-bold text-white mb-2">Formar Una Vida Juntos</h3>
+                        <p class="text-gray-300 text-xs leading-relaxed font-light">
+                            Mi mayor anhelo es despertar cada mañana sabiendo que eres mi esposa, construir nuestro
+                            propio espacio, compartir sueños y hacer realidad el proyecto de vida con el que ambos
+                            soñamos y tener mis 5 pelaos.
+                        </p>
+                    </div>
+                    <div
+                        class="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-[11px] text-softGold">
+                        <span>meta a futuro</span>
+                        <i class="fa-solid fa-heart beating-heart"></i>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="promesa" class="scroll-mt-24">
+            <div class="glass-romantic rounded-3xl p-8 md:p-12 border border-roseGold/40 relative overflow-hidden">
+                <div
+                    class="absolute -top-24 -right-24 w-60 h-60 bg-red-800/20 rounded-full blur-3xl pointer-events-none">
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                    <div class="text-center flex flex-col items-center">
+                        <div id="ringContainer" class="relative cursor-pointer group my-4">
+                            <div
+                                class="w-48 h-48 md:w-56 md:h-56 rounded-full border-2 border-roseGold/60 flex items-center justify-center relative transition-transform duration-500 group-hover:scale-105">
+                                <i
+                                    class="fa-solid fa-ring text-6xl md:text-7xl text-softGold drop-shadow-[0_0_25px_rgba(244,208,111,0.6)]"></i>
+                                <i class="fa-solid fa-heart text-red-500 text-2xl absolute beating-heart"></i>
+                            </div>
+                        </div>
+                        <p class="text-xs text-softGold font-serif">Toca el anillo para reafirmar nuestro pacto</p>
+                    </div>
+
+                    <div class="space-y-6">
+                        <span class="text-xs font-bold text-softGold tracking-widest uppercase">quise hacerlo
+                            mejor</span>
+                        <h2 class="font-serif text-3xl font-bold text-white">El Anillo de Promesa</h2>
+                        <p class="text-gray-300 text-sm leading-relaxed font-light">
+                            Este anillo no es una joya ordinaria; es mi promesa formal de cuidarte, respetarte y
+                            entregarte lo mejor de mí. Es la prueba de mi compromiso con tu felicidad de que te quiero,
+                            que eres mi prioridad y que tendras los otros dos que nos faltan.
+                        </p>
+
+                        <div class="space-y-3 text-xs text-gray-200">
+                            <div class="flex items-start gap-3">
+                                <i class="fa-solid fa-heart text-red-500 text-sm mt-0.5 beating-heart"></i>
+                                <span>Prometo amarte con paciencia por que la necesito, madurez y pero sobre todo tu
+                                    apoyo, quiero ser tu proyecto de vida.</span>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="fa-solid fa-heart text-red-500 text-sm mt-0.5 beating-heart"></i>
+                                <span>Prometo ser tu apoyo constante en cada uno de tus proyectos y metas.</span>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="fa-solid fa-heart text-red-500 text-sm mt-0.5 beating-heart"></i>
+                                <span>Prometo trabajar día a día para que juntos formemos el hogar que soñamos.</span>
+                            </div>
+                        </div>
+
+                        <button id="pactButton"
+                            class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-crimsonLove via-roseGold to-softGold text-darkObsidian font-bold text-xs uppercase tracking-wider shadow-xl hover:brightness-110 active:scale-98 transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-heart text-red-900 beating-heart"></i>
+                            <span>reflejo de promesa</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="scroll-mt-24">
+            <div class="text-center mb-12">
+                <span class="text-xs font-bold text-softGold tracking-widest uppercase">Cartas Abiertas</span>
+                <h2 class="font-serif text-3xl md:text-5xl font-bold mt-2 text-white">Mensajes del Corazón</h2>
+                <p class="text-gray-400 text-xs mt-2">Haz clic en cada sobre para leer lo que llevo dentro.</p>
+            </div>
+
+            <div class="space-y-4 max-w-3xl mx-auto">
+
+                <!-- Accordion 1 -->
+                <div class="glass-romantic rounded-2xl p-5 border border-roseGold/20">
+                    <button class="accordionToggle w-full flex items-center justify-between text-left">
+                        <span class="font-serif text-base font-bold text-roseGold flex items-center gap-3">
+                            <i class="fa-solid fa-envelope text-red-500 beating-heart"></i>
+                            Carta #1: Eres importante para mi
+                        </span>
+                        <i class="fa-solid fa-chevron-down text-xs text-softGold transition-transform"></i>
+                    </button>
+                    <div
+                        class="letter-content text-xs text-gray-300 font-light space-y-3 leading-relaxed mt-4 border-t border-white/10 pt-4">
+                        <p>Mi hermosa Deimili,</p>
+                        <p>Quería escribirte esto para recordarte lo especial que eres para mí. A veces las palabras se
+                            quedan cortas para expresar la magnitud de lo que siento por ti, pero quiero que sepas que
+                            eres mi lugar seguro en el mundo.</p>
+                        <p>Amo todo de ti: tu fortaleza, tu ternura y esa luz única que irradias. Gracias por darme la
+                            oportunidad de quererte día tras día.</p>
+                    </div>
+                </div>
+
+                <!-- Accordion 2 -->
+                <div class="glass-romantic rounded-2xl p-5 border border-roseGold/20">
+                    <button class="accordionToggle w-full flex items-center justify-between text-left">
+                        <span class="font-serif text-base font-bold text-roseGold flex items-center gap-3">
+                            <i class="fa-solid fa-envelope text-red-500 beating-heart"></i>
+                            Carta #2: El deseo de construir un futuro contigo
+                        </span>
+                        <i class="fa-solid fa-chevron-down text-xs text-softGold transition-transform"></i>
+                    </button>
+                    <div
+                        class="letter-content text-xs text-gray-300 font-light space-y-3 leading-relaxed mt-4 border-t border-white/10 pt-4">
+                        <p>Deimili,</p>
+                        <p>Cuando me detengo a pensar en el futuro, no me imagino caminando al lado de nadie más que no
+                            seas tú. Sueño con el día en que tengamos nuestro hogar, compartamos las rutinas más simples
+                            y celebremos cada logro juntos.</p>
+                        <p>Sé que los dos tenemos todo para salir adelante y construir la vida próspera y feliz que
+                            merecemos.</p>
+                    </div>
+                </div>
+
+                <!-- Accordion 3 -->
+                <div class="glass-romantic rounded-2xl p-5 border border-roseGold/20">
+                    <button class="accordionToggle w-full flex items-center justify-between text-left">
+                        <span class="font-serif text-base font-bold text-roseGold flex items-center gap-3">
+                            <i class="fa-solid fa-envelope text-red-500 beating-heart"></i>
+                            Carta #3: con Dios y juntos seremos invencibles
+                        </span>
+                        <i class="fa-solid fa-chevron-down text-xs text-softGold transition-transform"></i>
+                    </button>
+                    <div
+                        class="letter-content text-xs text-gray-300 font-light space-y-3 leading-relaxed mt-4 border-t border-white/10 pt-4">
+                        <p>Mi niña linda,</p>
+                        <p>Recordar el mar, el hotel, las risas y la paz que sentimos al dormir juntos me da toda la
+                            seguridad que necesito. Ningún obstáculo es más grande que el amor que sentimos.</p>
+                        <p>Nunca dudes de lo valiosa que eres ni de lo mucho que te amo. Si ponemos a Dios en nuestro
+                            corazón, ¡Juntos podemos con todo!</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="galeria" class="scroll-mt-24">
+            <div class="text-center mb-12">
+                <span class="text-xs font-bold text-softGold tracking-widest uppercase">Nuestros Rostros, Nuestra
+                    Historia</span>
+                <h2 class="font-serif text-3xl md:text-5xl font-bold mt-2 text-white">Galería de Fotos Inolvidables</h2>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+
+                <div
+                    class="glass-romantic p-2 rounded-2xl border border-roseGold/20 group cursor-pointer overflow-hidden">
+                    <div class="h-64 rounded-xl overflow-hidden relative">
+                        <img src="WhatsApp Image 2026-09-23 at 3.40.52 PM (1).jpeg" alt="Caminando de la mano"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-darkObsidian/80 via-transparent to-transparent">
+                        </div>
+                        <span class="absolute bottom-3 left-3 text-[10px] font-semibold text-softGold">Tomados de la
+                            mano</span>
+                    </div>
+                </div>
+
+                <div
+                    class="glass-romantic p-2 rounded-2xl border border-roseGold/20 group cursor-pointer overflow-hidden">
+                    <div class="h-64 rounded-xl overflow-hidden relative">
+                        <img src="WhatsApp Image 2026-09-23 at 3.40.52 PM (2).jpeg" alt="Muecas cariñosas"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-darkObsidian/80 via-transparent to-transparent">
+                        </div>
+                        <span class="absolute bottom-3 left-3 text-[10px] font-semibold text-softGold">Nuestras
+                            miradas</span>
+                    </div>
+                </div>
+
+                <div
+                    class="glass-romantic p-2 rounded-2xl border border-roseGold/20 group cursor-pointer overflow-hidden">
+                    <div class="h-64 rounded-xl overflow-hidden relative">
+                        <img src="WhatsApp Image 2026-09-23 at 3.40.53 PM.jpeg" alt="Abrazados ternura"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-darkObsidian/80 via-transparent to-transparent">
+                        </div>
+                        <span class="absolute bottom-3 left-3 text-[10px] font-semibold text-softGold">Cercanía y
+                            ternura</span>
+                    </div>
+                </div>
+
+                <div
+                    class="glass-romantic p-2 rounded-2xl border border-roseGold/20 group cursor-pointer overflow-hidden">
+                    <div class="h-64 rounded-xl overflow-hidden relative">
+                        <img src="WhatsApp Image 2026-09-23 at 3.40.52 PM.jpeg" alt="Momento íntimo"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-darkObsidian/80 via-transparent to-transparent">
+                        </div>
+                        <span class="absolute bottom-3 left-3 text-[10px] font-semibold text-softGold">Piel a
+                            piel</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="glass-romantic rounded-3xl p-8 text-center border border-roseGold/30 relative">
+            <i class="fa-solid fa-heart text-red-500 text-3xl beating-heart mb-3"></i>
+            <h3 class="font-serif text-2xl md:text-3xl font-bold text-white mb-2">Una Frase Especial Para Deimili</h3>
+            <p class="text-gray-300 text-xs max-w-lg mx-auto mb-6">Presiona el botón para descubrir un mensaje dedicado
+                a ti hoy.</p>
+
+            <button id="randomQuoteBtn"
+                class="px-6 py-3 rounded-full bg-gradient-to-r from-crimsonLove via-roseGold to-softGold text-darkObsidian font-bold text-xs uppercase tracking-wider hover:scale-105 transition-transform shadow-xl">
+                <i class="fa-solid fa-sparkles mr-2"></i> Generar Mensaje
+            </button>
+
+            <div id="quoteResult"
+                class="mt-6 p-4 rounded-xl bg-white/5 border border-white/10 text-softGold font-script text-2xl hidden">
+                "Deimili, jamás olvides que eres mi persona favorita y el amor de mi vida."
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="text-center py-8 text-xs text-gray-500 border-t border-white/10 mt-16 relative z-20">
+        <p>Diseñado especialmente con todo mi amor para Deimili ❤️ Juntos Podemos Con Todo</p>
+    </footer>
+
+    <script>
+        /* 1. BEATING HEART PARTICLES CANVAS */
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class HeartParticle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + 20;
+                this.size = Math.random() * 14 + 8;
+                this.speedY = Math.random() * 1.2 + 0.4;
+                this.speedX = (Math.random() - 0.5) * 0.6;
+                this.opacity = Math.random() * 0.5 + 0.3;
+                this.color = Math.random() > 0.4 ? '#800A1D' : '#E0A96D';
+            }
+            update() {
+                this.y -= this.speedY;
+                this.x += this.speedX;
+                if (this.y < -30) this.reset();
+            }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.opacity;
+                ctx.font = `${this.size}px sans-serif`;
+                ctx.fillText('💓', this.x, this.y);
+                ctx.restore();
+            }
+        }
+
+        for (let i = 0; i < 30; i++) {
+            const p = new HeartParticle();
+            p.y = Math.random() * canvas.height;
+            particles.push(p);
+        }
+
+        function renderParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(renderParticles);
+        }
+        renderParticles();
+
+        /* 2. ROMANTIC AUDIO SYNTHESIZER (Web Audio API) */
+        let audioCtx = null;
+        let isPlaying = false;
+        let audioTimer = null;
+
+        const playAudioBtn = document.getElementById('playAudioBtn');
+        const audioSubtitle = document.getElementById('audioSubtitle');
+
+        // Musical frequencies for romantic ambient chords (F#m, D, A, E)
+        // Melodía principal (Mano derecha: Mi, Sol, La, Re, Do)
+        // + Acordes de acompañamiento (Mano izquierda: C, G, Am, F)
+        const chordNotes = [
+            // --- MELODÍA PRINCIPAL (Mano Derecha) ---
+            659.25, // Mi (E5)
+            783.99, // Sol (G5)
+            880.00, // La (A5)
+            587.33, // Re (D5)
+            523.25, // Do (C5)
+
+            // --- ACOMPAÑAMIENTO BASE (Mano Izquierda) ---
+            // Do mayor (C): Do - Mi - Sol
+            261.63, 329.63, 392.00,
+
+            // Sol mayor (G): Sol - Si - Re
+            196.00, 246.94, 293.66,
+
+            // La menor (Am): La - Do - Mi
+            220.00, 261.63, 329.63,
+
+            // Fa mayor (F): Fa - La - Do
+            174.61, 220.00, 261.63
+        ];
+        function playSoftNote() {
+            if (!audioCtx || !isPlaying) return;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                // Toma una nota del conjunto armónico
+                const freq = chordNotes[Math.floor(Math.random() * chordNotes.length)];
+
+                // 'sine' o 'triangle' para un timbre suave tipo marimba/piano de caja musical
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+                // Volumen suave con entrada y salida gradual (sin golpe seco)
+                gain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.04, audioCtx.currentTime + 0.5); // Entrada suave
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 4.0); // Desvanecimiento largo
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + 4.1);
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        /* 3. ACCORDION LETTER TOGGLES */
+        const accordions = document.querySelectorAll('.accordionToggle');
+        accordions.forEach(acc => {
+            acc.addEventListener('click', () => {
+                const content = acc.nextElementSibling;
+                const icon = acc.querySelector('i.fa-chevron-down');
+                const isOpen = content.classList.contains('open');
+
+                document.querySelectorAll('.letter-content').forEach(c => c.classList.remove('open'));
+                document.querySelectorAll('.accordionToggle i.fa-chevron-down').forEach(i => i.style.transform = 'rotate(0deg)');
+
+                if (!isOpen) {
+                    content.classList.add('open');
+                    if (icon) icon.style.transform = 'rotate(180deg)';
+                }
+            });
+        });
+
+        /* 4. PROMISE RING INTERACTION */
+        const ringContainer = document.getElementById('ringContainer');
+        const pactButton = document.getElementById('pactButton');
+
+        function createSparkles() {
+            for (let i = 0; i < 10; i++) {
+                const elem = document.createElement('div');
+                elem.innerText = '💓';
+                elem.className = 'fixed text-2xl z-50 pointer-events-none animate-ping';
+                elem.style.left = (window.innerWidth / 2 + (Math.random() - 0.5) * 250) + 'px';
+                elem.style.top = (window.innerHeight / 2 + (Math.random() - 0.5) * 250) + 'px';
+                document.body.appendChild(elem);
+                setTimeout(() => elem.remove(), 1200);
+            }
+        }
+
+        ringContainer.addEventListener('click', () => {
+            createSparkles();
+        });
+
+        pactButton.addEventListener('click', () => {
+            createSparkles();
+            pactButton.innerHTML = '<i class="fa-solid fa-heart beating-heart"></i> ¡Promesa Reafirmada con Deimili!';
+            setTimeout(() => {
+                pactButton.innerHTML = '<i class="fa-solid fa-heart text-red-900 beating-heart"></i> <span>Sellar Nuestra Promesa Eternamente</span>';
+            }, 3500);
+        });
+
+        /* 5. RANDOM DEDICATED QUOTE GENERATOR */
+        const quotes = [
+            "\"Deimili, eres la mujer más fuerte, dulce y hermosa que conozco. Gracias por existir.\"",
+            "\"No sé si estaremos juntos, pero lo que sí sé es que te quiero profundamente.\"",
+            "\"No hay distancia ni problema que no podamos vencer. Juntos podemos con todo.\"",
+            "\"Tu sonrisa es mi razón de ser y mi mayor motivación para construir la vida que soñamos.\"",
+            "\"Llevar tu anillo de promesa es el honor más grande de mi vida.\""
+        ];
+
+        const randomBtn = document.getElementById('randomQuoteBtn');
+        const quoteResult = document.getElementById('quoteResult');
+
+        randomBtn.addEventListener('click', () => {
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            quoteResult.innerText = randomQuote;
+            quoteResult.classList.remove('hidden');
+        });
+    </script>
+</body>
+
+</html>
